@@ -38,34 +38,40 @@
 **
 ****************************************************************************/
 
+#ifndef FILTERMODEL_H
+#define FILTERMODEL_H
 
-#include <QtWidgets/QApplication>
-#include <QtQml>
-#include <QtQuick/QQuickView>
+#include <qobject.h>
+#include <qsortfilterproxymodel.h>
 
-#include "src/filtermodel.h"
-
-int main(int argc, char *argv[])
+class Filter : public QSortFilterProxyModel
 {
-    QApplication app(argc, argv);
+    Q_PROPERTY(QAbstractItemModel *sourceModel READ sourceModel WRITE setSourceModel NOTIFY sourceModelChanged)
 
-    qmlRegisterType<Filter>("Qt.Model", 1, 0, "SortFilterProxy");
-    qmlRegisterType<QAbstractItemModel>();
+public:
 
-    QQmlEngine engine;
-    QQmlComponent component(&engine);
-    component.loadUrl(QUrl("qrc:/qml/main.qml"));
-    if ( !component.isReady() ) {
-        qWarning("%s", qPrintable(component.errorString()));
-        return -1;
+    QAbstractItemModel *sourceModel() const
+    {
+        return m_model;
     }
-    QObject *topLevel = component.create();
-    QQuickWindow *window = qobject_cast<QQuickWindow *>(topLevel);
-    if ( !window ) {
-        qWarning("Error: Your root item has to be a Window.");
-        return -1;
+
+public slots:
+    void setSourceModel(QAbstractItemModel *arg)
+    {
+        if (m_model == arg)
+            return;
+
+        m_model = arg;
+        emit sourceModelChanged();
     }
-    QObject::connect(&engine, SIGNAL(quit()), &app, SLOT(quit()));
-    window->show();
-    return app.exec();
-}
+
+signals:
+    void sourceModelChanged();
+
+private:
+    QAbstractItemModel *m_model;
+};
+
+
+#endif
+

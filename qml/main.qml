@@ -43,6 +43,8 @@ import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 import Enginio 1.0
 
+import Qt.Model 1.0
+
 ApplicationWindow {
     width: 640
     height: 480
@@ -71,51 +73,53 @@ ApplicationWindow {
         enginio: enginio
         query: {
             "objectType": "objects.card",
-            "state": "open"
         }
+        //"query": {"status": "open"}
     }
 
-    Rectangle {
-        anchors.fill: parent
+    SortFilterProxy {
+        id: filter
+//        model: cardList
 
-        ListView {
-            id: view
-            model: cardList
-            x: 4
-            anchors.top: parent.top
-            anchors.topMargin: 2
-            anchors.bottom: row.top
-            spacing: 2
+    }
 
-            width: 300
-            clip: true
-            delegate: Card {
-                title: model.title
-                description: model.description
-                synced: _synced
-                onTitleChanged: {
-                    console.log("Setting new title: ", title)
-                    cardList.setProperty(index, title, "title")
+    Button {
+        id: newButton
+        text: "New todo"
+        onClicked: cardList.append({"title": "TODO", "description": "description", "status": "open"})
+        anchors.margins: 4
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+    }
+
+    ListView {
+        id: view
+        model: filter
+        x: 4
+        anchors.top: parent.top
+        anchors.topMargin: 2
+        anchors.bottom: newButton.top
+        spacing: 2
+
+        width: 300
+        clip: true
+        delegate: Card {
+            title: model.title
+            description: model.description
+            synced: _synced
+            onTitleChanged: timer.restart()
+            onDescriptionChanged: timer.restart()
+            onStatusChanged: timer.restart()
+
+            Timer {
+                id: timer
+                running: false; repeat: false
+                interval: 2000
+                onTriggered: {
+                    cardList.setProperty(index, "title", title)
+                    cardList.setProperty(index, "description", description)
+                    cardList.setProperty(index, "status", status)
                 }
-            }
-        }
-
-        RowLayout {
-            id: row
-            height: 30
-            x: 4
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 4
-            TextField {
-                id: title
-            }
-            TextField {
-                id: description
-            }
-
-            Button {
-                text: "Ok"
-                onClicked: cardList.append({"title": title.text, "description": description.text, "state": "open"})
             }
         }
     }
@@ -125,7 +129,7 @@ ApplicationWindow {
         enginio: enginio
         query: {
             "objectType": "objects.card",
-            "state": "progress"
+            "query": {"status": "progress"}
         }
     }
 
@@ -133,12 +137,13 @@ ApplicationWindow {
         id: viewProgress
         model: inProgressModel
         x: 4 + 310
-        anchors.top: parent.top
-        anchors.topMargin: 2
-        anchors.bottom: row.top
+        height: 400
+//        anchors.top: parent.top
+//        anchors.topMargin: 2
+//        anchors.bottom: row.top
+        width: 300
         spacing: 2
 
-        width: 300
         clip: true
         delegate: Card {
             title: model.title

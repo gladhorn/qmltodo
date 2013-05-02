@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>qml/main.qml</file>
         <file>qml/Card.qml</file>
+        <file>qml/images/arrow-right.png</file>
     </qresource>
 </RCC>

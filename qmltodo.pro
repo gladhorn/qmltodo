@@ -12,6 +12,8 @@ OTHER_FILES += \
 RESOURCES += \
     resources.qrc
 
+include(src/src.pri)
+
 MOC_DIR = ./.moc
 OBJECTS_DIR = ./.obj
 UI_DIR = ./.ui
