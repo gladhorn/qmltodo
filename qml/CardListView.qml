@@ -39,74 +39,45 @@
 ****************************************************************************/
 
 import QtQuick 2.1
-import QtQuick.Controls 1.0
-import QtQuick.Layouts 1.0
 import Enginio 1.0
 
 import Qt.Model 1.0
 
-ApplicationWindow {
-    width: 640
-    height: 480
-    minimumWidth: 400
-    minimumHeight: 300
+ListView {
+    property string title
+    property alias sourceModel: filter.sourceModel
+    property alias statusFilter: filter.statusFilter
 
-    menuBar: MenuBar {
-        Menu {
-            title: "File"
-            MenuItem { text: "Quit"; onTriggered: Qt.quit() }
-        }
-        Menu {
-            title: "Help"
-            MenuItem { text: "About..."; enabled: false }
-        }
+    SortFilterProxy {
+        id: filter
+        sourceModel: cardList
     }
 
-    Enginio {
-        id: enginio
-        backendId: "516d0cce698b3c49460010e5"
-        backendSecret: "2de74ce890df2272b6c1059b8993d05e"
-    }
+    id: view
+    model: filter
+    spacing: 2
+    clip: true
 
-    EnginioModel {
-        id: cardList
-        enginio: enginio
-        query: {
-            "objectType": "objects.card",
+    header: Rectangle {
+        radius: 5
+        width: parent.width
+        height: 40
+        border.color: "#00ffff"
+        Text {
+            anchors.centerIn: parent
+            text: title
         }
     }
 
-    Button {
-        id: newButton
-        text: "New todo"
-        onClicked: cardList.append({"title": "TODO", "description": "description", "status": "open"})
-        anchors.margins: 4
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-    }
-
-    CardListView {
-        width: parent.width / 3
-        height: parent.height - 40
-        x: 0
-        title: "To Do"
-        sourceModel: cardList
-        statusFilter: "open"
-    }
-    CardListView {
-        width: parent.width / 3
-        height: parent.height - 40
-        x: parent.width / 3
-        title: "In Progress"
-        sourceModel: cardList
-        statusFilter: "progress"
-    }
-    CardListView {
-        width: parent.width / 3
-        height: parent.height - 40
-        x: parent.width / 3 * 2
-        title: "Done"
-        sourceModel: cardList
-        statusFilter: "done"
+    delegate: Card {
+        width: parent.width
+        title: model.title
+        status: model.status
+        description: model.description
+        synced: _synced
+        //onTitleChanged: //timer.restart()
+        //onDescriptionChanged: //timer.restart()
+        onStatusChanged: cardList.setProperty(index, "status", status)
     }
 }
+

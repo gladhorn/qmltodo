@@ -38,10 +38,27 @@ Rectangle {
             anchors.margins: 5
             MouseArea {
                 anchors.fill: parent
-                onClicked: card.status = "progress"
+                onClicked: {
+                    card.status == "progress" ? card.status = "done" : card.status = "progress"
+                    console.log("New card status: ", card.status)
+                }
             }
+            visible: card.status != "done"
         }
-
+        Image {
+            source: "images/arrow-left.png"
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.margins: 5
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    card.status == "progress" ? card.status = "open" : card.status = "progress"
+                    console.log("New card status: ", card.status)
+                }
+            }
+            visible: card.status != "open"
+        }
         anchors.fill: parent
         onPressed: t.forceActiveFocus()
         onReleased: detailsVisible = !detailsVisible

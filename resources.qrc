@@ -3,5 +3,7 @@
         <file>qml/main.qml</file>
         <file>qml/Card.qml</file>
         <file>qml/images/arrow-right.png</file>
+        <file>qml/CardListView.qml</file>
+        <file>qml/images/arrow-left.png</file>
     </qresource>
 </RCC>

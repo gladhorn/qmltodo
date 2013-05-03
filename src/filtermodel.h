@@ -46,30 +46,27 @@
 
 class Filter : public QSortFilterProxyModel
 {
+    Q_OBJECT
     Q_PROPERTY(QAbstractItemModel *sourceModel READ sourceModel WRITE setSourceModel NOTIFY sourceModelChanged)
+    Q_PROPERTY(QString statusFilter READ statusFilter WRITE setStatusFilter NOTIFY statusFilterChanged)
 
 public:
-
-    QAbstractItemModel *sourceModel() const
-    {
-        return m_model;
-    }
-
-public slots:
-    void setSourceModel(QAbstractItemModel *arg)
-    {
-        if (m_model == arg)
-            return;
-
-        m_model = arg;
-        emit sourceModelChanged();
-    }
+    QAbstractItemModel *sourceModel() const;
+    QString statusFilter() const { return m_statusFilter; }
 
 signals:
     void sourceModelChanged();
+    void statusFilterChanged();
+
+public slots:
+    void setSourceModel(QAbstractItemModel *arg);
+    void setStatusFilter(const QString &filter);
+
+private slots:
+    void updateRoles();
 
 private:
-    QAbstractItemModel *m_model;
+    QString m_statusFilter;
 };
 
 
