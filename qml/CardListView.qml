@@ -60,9 +60,9 @@ ListView {
 
     header: Rectangle {
         radius: 5
-        width: parent.width
+        width: view.width
         height: 40
-        border.color: "#00ffff"
+        border.color: "#ee0000"
         Text {
             anchors.centerIn: parent
             text: title
@@ -75,9 +75,9 @@ ListView {
         status: model.status
         description: model.description
         synced: _synced
-        //onTitleChanged: //timer.restart()
-        //onDescriptionChanged: //timer.restart()
-        onStatusChanged: cardList.setProperty(index, "status", status)
+        onSyncTitle: filter.setProperty(index, "title", title)
+        onSyncDescription: filter.setProperty(index, "description", description)
+        onStatusChanged: filter.setProperty(index, "status", status)
     }
 }
 

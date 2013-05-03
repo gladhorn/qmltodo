@@ -7,7 +7,7 @@ SOURCES += \
     main.cpp
 
 OTHER_FILES += \
-    qml/main.qml
+    qml/*.qml
 
 RESOURCES += \
     resources.qrc

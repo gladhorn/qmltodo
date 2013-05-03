@@ -1,6 +1,9 @@
 
 #include "filtermodel.h"
 
+#include <Enginio/enginiomodel.h>
+
+#include <qdebug.h>
 
 void Filter::setSourceModel(QAbstractItemModel *arg)
 {
@@ -25,11 +28,8 @@ void Filter::setStatusFilter(const QString &filter)
     if (m_statusFilter == filter)
         return;
     m_statusFilter = filter;
-//    setFilterFixedString(filter);
     emit statusFilterChanged();
 }
-
-#include <qdebug.h>
 
 void Filter::updateRoles()
 {
@@ -39,3 +39,14 @@ void Filter::updateRoles()
     setFilterFixedString(m_statusFilter);
 }
 
+void Filter::setProperty(int row, const QString &role, const QVariant &value)
+{
+    QModelIndex proxyIndex = index(row, 0);
+    QModelIndex sourceIndex = mapToSource(proxyIndex);
+    EnginioModel *model = qobject_cast<EnginioModel*>(sourceModel());
+    if (!model) {
+        qWarning() << "Invalid model!";
+        return;
+    }
+    model->setProperty(sourceIndex.row(), role, value);
+}

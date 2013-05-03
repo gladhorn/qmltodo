@@ -54,6 +54,8 @@ public:
     QAbstractItemModel *sourceModel() const;
     QString statusFilter() const { return m_statusFilter; }
 
+    Q_INVOKABLE void setProperty(int row, const QString &role, const QVariant &value);
+
 signals:
     void sourceModelChanged();
     void statusFilterChanged();

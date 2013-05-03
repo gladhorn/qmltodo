@@ -86,27 +86,31 @@ ApplicationWindow {
     }
 
     CardListView {
-        width: parent.width / 3
+        width: parent.width / 3 - 8
         height: parent.height - 40
-        x: 0
+        x: 4
+        y: 4
         title: "To Do"
         sourceModel: cardList
         statusFilter: "open"
     }
     CardListView {
-        width: parent.width / 3
+        width: parent.width / 3 - 8
         height: parent.height - 40
-        x: parent.width / 3
+        x: parent.width / 3 + 4
+        y: 4
         title: "In Progress"
         sourceModel: cardList
         statusFilter: "progress"
     }
     CardListView {
-        width: parent.width / 3
+        width: parent.width / 3 - 8
         height: parent.height - 40
-        x: parent.width / 3 * 2
+        x: parent.width / 3 * 2 + 4
+        y: 4
         title: "Done"
         sourceModel: cardList
         statusFilter: "done"
     }
 }
+
