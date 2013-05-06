@@ -1,18 +1,14 @@
 QT += qml quick widgets network
 QT += enginio
 
-CONFIG += console
-TARGET = qmltodo
-SOURCES += \
-    main.cpp
+TEMPLATE = subdirs
+SUBDIRS += src
 
 OTHER_FILES += \
     qml/*.qml
 
 RESOURCES += \
     resources.qrc
-
-include(src/src.pri)
 
 MOC_DIR = ./.moc
 OBJECTS_DIR = ./.obj
