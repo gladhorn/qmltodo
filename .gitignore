@@ -1,0 +1,11 @@
+.moc
+.obj
+.rcc
+Makefile*
+*.o
+*.pro.user*
+*.swp
+
+src/qmltodo/qmltodo
+src/widgettodo/widgettodo
+
