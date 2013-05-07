@@ -38,34 +38,28 @@
 **
 ****************************************************************************/
 
+#ifndef TODOWINDOW_H
+#define TODOWINDOW_H
 
-#include <QtWidgets/QApplication>
-#include <QtQml>
-#include <QtQuick/QQuickView>
+#include <qmainwindow.h>
+#include <Enginio>
 
-#include "filtermodel.h"
-
-int main(int argc, char *argv[])
+class TodoWindow : public QMainWindow
 {
-    QApplication app(argc, argv);
+    Q_OBJECT
 
-    qmlRegisterType<Filter>("Qt.Model", 1, 0, "SortFilterProxy");
-    qmlRegisterType<QAbstractItemModel>();
+public:
+    TodoWindow();
 
-    QQmlEngine engine;
-    QQmlComponent component(&engine);
-    component.loadUrl(QUrl("qrc:/qml/main.qml"));
-    if ( !component.isReady() ) {
-        qWarning("%s", qPrintable(component.errorString()));
-        return -1;
-    }
-    QObject *topLevel = component.create();
-    QQuickWindow *window = qobject_cast<QQuickWindow *>(topLevel);
-    if ( !window ) {
-        qWarning("Error: Your root item has to be a Window.");
-        return -1;
-    }
-    QObject::connect(&engine, SIGNAL(quit()), &app, SLOT(quit()));
-    window->show();
-    return app.exec();
-}
+private slots:
+    void test();
+
+private:
+    void init();
+    EnginioClient *m_client;
+    EnginioModel *m_model;
+};
+
+
+#endif
+

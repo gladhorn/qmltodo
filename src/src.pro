@@ -1,6 +1,5 @@
 TEMPLATE = subdirs
-SUBDIRS = \
-          qmltodo \
+SUBDIRS = qmltodo \
           widgettodo
 
-
+OTHER_FILES = qml/*.qml

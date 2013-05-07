@@ -39,33 +39,14 @@
 ****************************************************************************/
 
 
-#include <QtWidgets/QApplication>
-#include <QtQml>
-#include <QtQuick/QQuickView>
+#include <QtWidgets>
 
-#include "filtermodel.h"
+#include "todowindow.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-
-    qmlRegisterType<Filter>("Qt.Model", 1, 0, "SortFilterProxy");
-    qmlRegisterType<QAbstractItemModel>();
-
-    QQmlEngine engine;
-    QQmlComponent component(&engine);
-    component.loadUrl(QUrl("qrc:/qml/main.qml"));
-    if ( !component.isReady() ) {
-        qWarning("%s", qPrintable(component.errorString()));
-        return -1;
-    }
-    QObject *topLevel = component.create();
-    QQuickWindow *window = qobject_cast<QQuickWindow *>(topLevel);
-    if ( !window ) {
-        qWarning("Error: Your root item has to be a Window.");
-        return -1;
-    }
-    QObject::connect(&engine, SIGNAL(quit()), &app, SLOT(quit()));
-    window->show();
+    TodoWindow win;
+    win.show();
     return app.exec();
 }

@@ -38,34 +38,35 @@
 **
 ****************************************************************************/
 
+#include "todowindow.h"
+#include "Enginio"
 
-#include <QtWidgets/QApplication>
-#include <QtQml>
-#include <QtQuick/QQuickView>
+#include <QtWidgets>
 
-#include "filtermodel.h"
-
-int main(int argc, char *argv[])
+TodoWindow::TodoWindow()
 {
-    QApplication app(argc, argv);
-
-    qmlRegisterType<Filter>("Qt.Model", 1, 0, "SortFilterProxy");
-    qmlRegisterType<QAbstractItemModel>();
-
-    QQmlEngine engine;
-    QQmlComponent component(&engine);
-    component.loadUrl(QUrl("qrc:/qml/main.qml"));
-    if ( !component.isReady() ) {
-        qWarning("%s", qPrintable(component.errorString()));
-        return -1;
-    }
-    QObject *topLevel = component.create();
-    QQuickWindow *window = qobject_cast<QQuickWindow *>(topLevel);
-    if ( !window ) {
-        qWarning("Error: Your root item has to be a Window.");
-        return -1;
-    }
-    QObject::connect(&engine, SIGNAL(quit()), &app, SLOT(quit()));
-    window->show();
-    return app.exec();
+    init();
 }
+
+void TodoWindow::init()
+{
+    m_client = new EnginioClient("516d0cce698b3c49460010e5", "2de74ce890df2272b6c1059b8993d05e", this);
+
+    m_model = new EnginioModel(this);
+    m_model->setEnginio(m_client);
+
+    QJsonObject query;
+    query.insert(QStringLiteral("objectType"), QStringLiteral("objects.card"));
+    m_model->setQuery(query);
+    m_model->execute();
+
+    QTreeView *todoView = new QTreeView;
+    todoView->setModel(m_model);
+    setCentralWidget(todoView);
+}
+
+void TodoWindow::test()
+{
+
+}
+
